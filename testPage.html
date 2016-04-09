@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="google" value="notranslate">
+    <title>Dundas Test Page - Arman Didandeh</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="normalize.css">
+    <script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  </head>
+
+  <body>
+    <form id="list" name ="list" action="#">
+      <header>
+        <h2 class="Header">Dundas Test Page - Arman Didandeh</h2>
+      </header>
+
+      <section>   
+      <div>
+
+        <div>
+          <div class="InputTitle" id="NVPairDivText">New Key/Value Pair (e.g. key1 = value1)</div>
+          <input id="NVPair" name="NVPair" type="text" class="NVInput" value="" size="8" tabindex="1">
+          <Input class="btn" id="AddKey" for="NVPair" type="button" value="Add"  tabindex="2" ></Input>
+        </div>      
+      </div>
+      </section>
+    
+      <section>
+        <div>
+          <div class="InputTitle">Key/Value Pair List</div>
+          <select id="NVList" name="NVList" rows="20" cols="50" tabindex="4" multiple = "multiple" size = "10"></select>
+          </br>
+          </br>
+          <input class="btn" id="SbNKey" for="NVList" type="button" value="Sort by Key"></input>
+          </br>
+          </br>
+          <input class="btn" id="SbVKey" for="NVList" type="button" value="Sort by Value"></input>
+          </br>
+          </br>
+          <input class="btn" id="DelKey" for="NVList" type="button" value="Delete"></input>
+          </br>
+          </br>
+          <input class="btn" id="XMLKey" for="NVList" type="button" value="Show XML"></input>
+          </br>
+          </br>
+        </div>
+      </section>  
+    </form>
+  </body>
+
+  <script>  
+    $(document).ready(function() {
+      var List = new Object();
+
+      $("#NVPair").focus();
+      
+      $("#NVPair").keypress(function(e){
+        if(e.keyCode === 13){
+          $("#AddKey").click();
+          return false;
+        }
+      });
+
+      $('#AddKey').click(function() {
+        var pair = $("#NVPair").val();
+        if (pair === null || pair === "") {
+          $("#NVPairDivText").addClass('InputTitleError');
+          return false;
+        }
+        else if (pair.indexOf('=') === -1 || pair.indexOf('=') === 0 || pair.indexOf('=') === pair.length) {
+          $(".InputTitle").addClass('InputTitleError');
+          return false; 
+        }
+        else if(!isNaN(pair[0])) {
+          $("#NVPairDivText").text("Keys cannot start with numbers").addClass("InputTitleError");
+          setTimeout(function() {
+            $("#NVPairDivText").removeClass('InputTitleError').text("New Key/Value Pair (e.g. key1 = value1)").addClass("InputTitle");
+          }, 5000);
+          return false;
+        }
+        else {
+          lkey = pair.substring(0,pair.indexOf('=')).trim();
+          lvalue = pair.substring((pair.indexOf('=')+1),pair.length).trim();
+          List[lkey]=lvalue;
+          $("#NVList").find('option').remove();
+          for (var name in List) {
+            s=name + "=" + List[name];
+            newitem = new Option(s, s);
+          $("#NVList").append(newitem);
+          }
+          $("#NVPair").val("");
+          $("#NVPairDivText").removeClass('InputTitleError');
+          $("#NVPairDivText").addClass('InputTitle');
+        }
+      });
+
+      $('#SbNKey').click(function() {
+        var s_names =[];
+        s_names = Object.keys(List).sort();
+        $("#NVList").find('option').remove();
+        for(var i = 0; i < s_names.length; i++) {
+          s=s_names[i] + "=" + List[s_names[i]];
+          newitem = new Option(s, s);
+          $("#NVList").append(newitem);
+        }
+      });
+
+      $('#SbVKey').click(function() {
+        var NList = [];
+        var s_names =[];
+        for(var name in List) {
+          NList.push({name: name, value: List[name]});
+        }
+        $("#NVList").find('option').remove();
+        var sorted = NList.sort(function(a, b) {
+          var av = Number(a.value);
+          var bv = Number(b.value);
+          if (isNaN(av) || isNaN(bv)) {
+            return a.value.localeCompare(b.value);
+          } else {
+            return av - bv;
+          }
+        });
+        s_names = Object.keys(NList).sort();
+        for(var i = 0; i < sorted.length; i++) {
+          s=sorted[i].name + "=" + sorted[i].value;
+          newitem = new Option(s, s);
+          $("#NVList").append(newitem);
+        }
+      });
+
+      $('#DelKey').click(function() {
+        $("#NVList option:selected").each(function(i){
+          var txt = $(this).text();
+          var delkey = txt.substring(0,txt.indexOf('='));
+          delete List[delkey];
+        });
+        $("#NVList option:selected").remove();
+      });  
+
+      $('#XMLKey').click(function() {
+        var doc = $.parseXML("<xml/>");
+        var xmlString = doc.getElementsByTagName("xml")[0];
+        var key, element;
+
+        for (key in List) {
+          element = doc.createElement(key);
+          $(element).text(List[key]);
+          xmlString.appendChild(element);
+        }
+        xmlTab = window.open('data:text/xml,' + encodeURIComponent(xmlString.outerHTML));
+        xmlTab.focus();
+      });
+
+    });
+    </script>
+</html>

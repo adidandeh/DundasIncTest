@@ -1,0 +1,89 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700);
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 10px 10%;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 1em;
+}
+
+#list header {
+  margin: 0 0 20px 0; 
+}
+#list header h2 {
+  margin: 0 0 10px 0;
+}
+#list header h3 {
+  font-size: 90%;
+  color: #999;
+}
+
+#list > div {
+  clear: both;
+  overflow: hidden;
+  margin: 0 0 10px 0;
+}
+
+.InputTitle {
+  font-size: 90%;
+  color: #999;
+  margin: 20px 0 0 0;
+  font-weight: bold;
+}
+
+.InputTitleError {
+  font-size: 90%;
+  color: red;
+  margin: 20px 0 0 0;
+  font-weight: bold;
+}
+
+#NVPair, #NVList {
+  width: 30%;
+  float: left;
+  margin: 5px 30px 5px 0;
+  border: 1px solid #ccc;
+  border-radius:5px;
+}
+
+
+#NVPair:focus,
+#NVList:focus {
+  #outline: 0px;
+  border-color: #4697e4;
+}
+
+@media (max-width: 600px) and (min-width: 351px) {
+  #NVPair, #NVList {
+    width: 60%;
+    float: left;
+    margin: 5px 30px 5px 0;
+    border: 1px solid #ccc;
+    border-radius:5px;
+  }
+  body {
+    padding: 20px 10%;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 350px) {
+  #NVPair, #NVList {
+    width: 100%;
+    float: left;
+    margin: 5px 30px 5px 0;
+    border: 1px solid #ccc;
+    border-radius:5px;
+  }
+  body {
+    padding: 20px 10%;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.6em;
+  }
+}
